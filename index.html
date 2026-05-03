@@ -28,6 +28,53 @@
         h1, h2, h3, h4, .font-heading { font-family: 'Space Grotesk', sans-serif; letter-spacing: -0.02em; }
         .gothic-serif { font-family: 'Playfair Display', serif; }
 
+        /* Welcome Animation Styles */
+        #welcome-overlay {
+            position: fixed;
+            inset: 0;
+            background: var(--near-black);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: transform 1.2s cubic-bezier(0.85, 0, 0.15, 1);
+        }
+
+        .loader-line {
+            width: 200px;
+            height: 2px;
+            background: rgba(255,255,255,0.1);
+            position: relative;
+            overflow: hidden;
+            margin-top: 20px;
+        }
+
+        .loader-progress {
+            position: absolute;
+            height: 100%;
+            width: 0%;
+            background: var(--gold);
+            animation: load 2.5s cubic-bezier(0.42, 0, 0.58, 1) forwards;
+        }
+
+        @keyframes load {
+            0% { width: 0%; }
+            100% { width: 100%; }
+        }
+
+        .reveal-up {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .reveal-up.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Existing Styles */
         #scroll-progress {
             position: fixed;
             top: 0;
@@ -43,6 +90,14 @@
             background: rgba(237, 234, 230, 0.9);
             backdrop-filter: blur(10px);
             border-bottom: 1px solid var(--border-taupe);
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: all 0.8s ease 2.8s;
+        }
+
+        .glass-nav.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         .card-noir {
@@ -104,15 +159,30 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Fallback for broken images */
         img { background-color: #d1d5db; }
     </style>
 </head>
-<body>
+<body class="overflow-hidden"> <!-- Locked until animation finishes -->
+
+    <!-- Welcome Overlay -->
+    <div id="welcome-overlay">
+        <div class="text-center">
+            <div class="flex items-center gap-3 mb-6 justify-center">
+                <div class="w-10 h-10 bg-[#D4AF37] rounded flex items-center justify-center animate-pulse">
+                    <div class="w-3 h-3 bg-[#1A1A1A] rotate-45"></div>
+                </div>
+                <span class="text-2xl font-bold uppercase tracking-[0.5em] text-white font-heading">Forge</span>
+            </div>
+            <p class="text-[10px] text-gray-500 uppercase tracking-[0.3em]">Initializing Fabrication Intelligence</p>
+            <div class="loader-line">
+                <div class="loader-progress"></div>
+            </div>
+        </div>
+    </div>
 
     <div id="scroll-progress"></div>
 
-    <nav class="glass-nav fixed top-0 w-full z-50">
+    <nav class="glass-nav fixed top-0 w-full z-50" id="main-nav">
         <div class="max-w-[1200px] mx-auto px-6 h-20 flex items-center justify-between">
             <div class="flex items-center gap-3 cursor-pointer" onclick="showPage('home')">
                 <div class="w-8 h-8 bg-[#1A1A1A] rounded flex items-center justify-center">
@@ -134,7 +204,7 @@
         <!-- Hero Section -->
         <section class="pt-48 pb-20 px-6">
             <div class="max-w-[1200px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-                <div>
+                <div class="reveal-up" data-delay="0">
                     <span class="text-[11px] font-bold tracking-[0.4em] text-[#D4AF37] uppercase mb-4 block">Additive Manufacturing</span>
                     <h1 class="text-6xl md:text-8xl font-bold leading-[0.9] mb-8">Modern <br><span class="gothic-serif italic font-normal">3D Printing</span></h1>
                     <p class="text-[#6B6B6B] text-lg mb-10 max-w-md leading-relaxed">
@@ -142,8 +212,7 @@
                     </p>
                     <button onclick="document.getElementById('topics-anchor').scrollIntoView({behavior: 'smooth'})" class="btn-primary">Explore Innovation</button>
                 </div>
-                <div class="relative">
-                    <!-- Copyright Free Image: Industrial 3D Printer -->
+                <div class="relative reveal-up" data-delay="300">
                     <img src="https://images.pexels.com/photos/3862132/pexels-photo-3862132.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" 
                          alt="Industrial 3D Printing Hardware" 
                          class="img-noir rounded-2xl shadow-2xl border border-white h-[550px] object-cover w-full">
@@ -154,15 +223,15 @@
         <!-- Dynamic Statistics -->
         <section class="py-12 px-6 bg-[#1A1A1A] text-white">
             <div class="max-w-[1200px] mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div class="p-8 border-l border-[#2F2F2F]">
+                <div class="p-8 border-l border-[#2F2F2F] reveal-up">
                     <span class="text-[10px] text-[#D4AF37] uppercase font-bold tracking-widest block mb-2">Plastic Waste Prevented (kg)</span>
                     <h4 id="counter-plastic" class="text-4xl font-bold font-heading">12,402.000</h4>
                 </div>
-                <div class="p-8 border-l border-[#2F2F2F]">
+                <div class="p-8 border-l border-[#2F2F2F] reveal-up">
                     <span class="text-[10px] text-[#D4AF37] uppercase font-bold tracking-widest block mb-2">CO2 Emissions Saved (T)</span>
                     <h4 id="counter-co2" class="text-4xl font-bold font-heading">482.12</h4>
                 </div>
-                <div class="p-8 border-l border-[#2F2F2F]">
+                <div class="p-8 border-l border-[#2F2F2F] reveal-up">
                     <span class="text-[10px] text-[#D4AF37] uppercase font-bold tracking-widest block mb-2">Precision Medical Parts</span>
                     <h4 id="counter-medical" class="text-4xl font-bold font-heading">8,912</h4>
                 </div>
@@ -172,8 +241,8 @@
         <!-- Video Feature -->
         <section id="video-feature" class="py-32 px-6 bg-white">
             <div class="max-w-[1000px] mx-auto text-center">
-                <h2 class="text-4xl font-bold mb-12 uppercase tracking-tighter">The Process Explained</h2>
-                <div class="video-wrapper shadow-2xl">
+                <h2 class="text-4xl font-bold mb-12 uppercase tracking-tighter reveal-up">The Process Explained</h2>
+                <div class="video-wrapper shadow-2xl reveal-up">
                     <iframe src="https://www.youtube.com/embed/a42znmU6BLE" title="3D Printing Explanation" allowfullscreen></iframe>
                 </div>
             </div>
@@ -182,12 +251,12 @@
         <!-- Interactive Topics Section -->
         <section id="topics-anchor" class="py-32 px-6">
             <div class="max-w-[1200px] mx-auto">
-                <h2 class="text-4xl font-bold mb-4 uppercase tracking-tighter">Core Research Topics</h2>
-                <p class="text-[#6B6B6B] mb-16">Select a topic below to expand technical documentation.</p>
+                <h2 class="text-4xl font-bold mb-4 uppercase tracking-tighter reveal-up">Core Research Topics</h2>
+                <p class="text-[#6B6B6B] mb-16 reveal-up">Select a topic below to expand technical documentation.</p>
                 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                     <!-- Card 1: Sustainability -->
-                    <div class="card-noir group cursor-pointer" onclick="showTopic('topic1')">
+                    <div class="card-noir group cursor-pointer reveal-up" onclick="showTopic('topic1')">
                         <img src="https://images.pexels.com/photos/1108101/pexels-photo-1108101.jpeg?auto=compress&cs=tinysrgb&w=600" class="w-full h-56 object-cover img-noir">
                         <div class="p-10">
                             <h3 class="text-xl font-bold mb-4 uppercase">Sustainable Cycles</h3>
@@ -198,7 +267,7 @@
                         </div>
                     </div>
                     <!-- Card 2: Bio-Medical -->
-                    <div class="card-noir group cursor-pointer" onclick="showTopic('topic2')">
+                    <div class="card-noir group cursor-pointer reveal-up" onclick="showTopic('topic2')">
                         <img src="https://images.pexels.com/photos/3913025/pexels-photo-3913025.jpeg?auto=compress&cs=tinysrgb&w=600" class="w-full h-56 object-cover img-noir">
                         <div class="p-10">
                             <h3 class="text-xl font-bold mb-4 uppercase">Bio-Medical Print</h3>
@@ -209,7 +278,7 @@
                         </div>
                     </div>
                     <!-- Card 3: Aerospace -->
-                    <div class="card-noir group cursor-pointer" onclick="showTopic('topic3')">
+                    <div class="card-noir group cursor-pointer reveal-up" onclick="showTopic('topic3')">
                         <img src="https://images.pexels.com/photos/8474432/pexels-photo-8474432.jpeg?auto=compress&cs=tinysrgb&w=600" class="w-full h-56 object-cover img-noir">
                         <div class="p-10">
                             <h3 class="text-xl font-bold mb-4 uppercase">Aerospace Alloy</h3>
@@ -221,7 +290,6 @@
                     </div>
                 </div>
 
-                <!-- Expanded Intelligence Panel -->
                 <div id="topic-display" class="mt-12 hidden"></div>
             </div>
         </section>
@@ -282,6 +350,37 @@
     <script>
         lucide.createIcons();
 
+        // Welcome Animation Sequence
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('welcome-overlay').style.transform = 'translateY(-100%)';
+                document.body.classList.remove('overflow-hidden');
+                document.getElementById('main-nav').classList.add('visible');
+                
+                // Trigger intersection observer manually for visible elements
+                initScrollReveal();
+            }, 2800);
+        });
+
+        function initScrollReveal() {
+            const observerOptions = {
+                threshold: 0.1
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const delay = entry.target.getAttribute('data-delay') || 0;
+                        setTimeout(() => {
+                            entry.target.classList.add('active');
+                        }, delay);
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.reveal-up').forEach(el => observer.observe(el));
+        }
+
         // Scroll Progress indicator
         window.onscroll = function() {
             let winScroll = document.body.scrollTop || document.documentElement.scrollTop;
@@ -311,13 +410,15 @@
             const target = document.getElementById(pageId + '-page');
             if(target) target.classList.remove('hidden-section');
             window.scrollTo(0, 0);
+            
+            // Re-init reveal for the new page
+            initScrollReveal();
         }
 
-        // Expanded Information Logic
         const topicData = {
             topic1: {
                 title: "Sustainable Cycles & Circularity",
-                desc: "3D printing represents the ultimate tool for a circular economy. Unlike traditional subtractive manufacturing (milling/turning), additive manufacturing only uses the exact amount of material required for the part. When combined with modern recycling technology, old plastic waste can be converted back into high-grade filament locally.",
+                desc: "3D printing represents the ultimate tool for a circular economy. Unlike traditional subtractive manufacturing, additive manufacturing only uses the exact amount of material required for the part. When combined with modern recycling technology, old plastic waste can be converted back into high-grade filament locally.",
                 details: [
                     "Zero-Waste: Material utilization rates exceed 98%.",
                     "Decentralized Supply: Print parts locally, eliminating shipping emissions.",
@@ -375,7 +476,6 @@
             `;
             lucide.createIcons();
             
-            // Smooth scroll to the display
             const yOffset = -120; 
             const element = document.getElementById('topic-display');
             const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
