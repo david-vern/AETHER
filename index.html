@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FORGE | Additive Innovation</title>
+    <title>FORGE | The S-Tier Innovation Platform</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Playfair+Display:ital,wght@0,700;1,700&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -24,8 +24,19 @@
             scroll-behavior: smooth;
         }
 
-        h1, h2, h3, .font-heading { font-family: 'Space Grotesk', sans-serif; letter-spacing: -0.02em; }
+        h1, h2, h3, h4, .font-heading { font-family: 'Space Grotesk', sans-serif; letter-spacing: -0.02em; }
         .gothic-serif { font-family: 'Playfair Display', serif; }
+
+        #scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: var(--gold);
+            z-index: 100;
+            width: 0%;
+            transition: width 0.1s ease;
+        }
 
         .glass-nav {
             background: rgba(237, 234, 230, 0.9);
@@ -37,7 +48,7 @@
             background: white;
             border: 1px solid var(--border-taupe);
             border-radius: 12px;
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
             overflow: hidden;
         }
 
@@ -45,6 +56,25 @@
             transform: translateY(-10px);
             border-color: var(--gold);
             box-shadow: 0 30px 60px rgba(0,0,0,0.08);
+        }
+
+        .img-noir {
+            filter: grayscale(100%) contrast(110%);
+            transition: filter 0.8s ease;
+        }
+
+        .card-noir:hover .img-noir { filter: grayscale(0%) contrast(100%); }
+
+        .viz-bar {
+            width: 3px;
+            background: var(--gold);
+            margin: 0 1px;
+            height: 4px;
+        }
+        .playing .viz-bar { animation: pulse 0.8s ease-in-out infinite; }
+        @keyframes pulse {
+            0%, 100% { height: 4px; }
+            50% { height: 16px; }
         }
 
         .btn-primary {
@@ -61,32 +91,21 @@
 
         .btn-primary:hover { background: var(--charcoal); transform: translateY(-2px); }
 
-        .img-noir {
-            filter: grayscale(100%) contrast(110%);
-            transition: filter 0.5s ease;
-        }
-
-        .card-noir:hover .img-noir { filter: grayscale(0%) contrast(100%); }
-
         .hidden-section { display: none; }
 
         .video-wrapper {
             position: relative;
             padding-bottom: 56.25%;
             height: 0;
-            overflow: hidden;
             border-radius: 12px;
             background: #000;
-            border: 1px solid var(--border-taupe);
         }
-
         .video-wrapper iframe {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0; width: 100%; height: 100%;
         }
+
+        .comp-row { border-bottom: 1px solid var(--border-taupe); padding: 20px 0; }
 
         .audio-toggle {
             position: fixed;
@@ -95,210 +114,280 @@
             z-index: 100;
             background: var(--near-black);
             color: white;
-            padding: 12px;
-            border-radius: 50%;
+            padding: 15px;
+            border-radius: 40px;
             cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
             box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        .topic-content-animate {
+            animation: fadeInSlide 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes fadeInSlide {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
 <body>
 
-    <!-- Audio Control -->
-    <div class="audio-toggle" onclick="toggleAudio()" title="Toggle Background Music">
-        <i data-lucide="volume-x" id="audio-icon"></i>
+    <div id="scroll-progress"></div>
+
+    <div class="audio-toggle" id="audio-btn" onclick="toggleAudio()" title="Toggle Background Music">
+        <div class="flex items-end h-4" id="visualizer">
+            <div class="viz-bar" style="animation-delay: 0.1s"></div>
+            <div class="viz-bar" style="animation-delay: 0.3s"></div>
+            <div class="viz-bar" style="animation-delay: 0.2s"></div>
+        </div>
+        <i data-lucide="volume-x" id="audio-icon" class="w-4 h-4"></i>
     </div>
     <audio id="bg-audio" loop>
         <source src="https://www.bensound.com/bensound-music/bensound-slowmotion.mp3" type="audio/mpeg">
     </audio>
 
-    <!-- Navigation -->
     <nav class="glass-nav fixed top-0 w-full z-50">
         <div class="max-w-[1200px] mx-auto px-6 h-20 flex items-center justify-between">
             <div class="flex items-center gap-3 cursor-pointer" onclick="showPage('home')">
                 <div class="w-8 h-8 bg-[#1A1A1A] rounded flex items-center justify-center">
                     <div class="w-2 h-2 bg-[#D4AF37] rotate-45"></div>
                 </div>
-                <span class="text-xl font-bold uppercase tracking-tighter">Forge</span>
+                <span class="text-xl font-bold uppercase tracking-tighter font-heading">Forge</span>
             </div>
             <div class="hidden md:flex items-center gap-10 text-[11px] font-bold uppercase tracking-[0.2em]">
                 <a href="javascript:void(0)" onclick="showPage('home')" class="hover:text-[#D4AF37]">Home</a>
+                <a href="#materials-lab" class="hover:text-[#D4AF37]">Materials</a>
                 <a href="javascript:void(0)" onclick="showPage('media')" class="hover:text-[#D4AF37]">Media & News</a>
-                <a href="#topics-anchor" class="btn-primary">Connect</a>
+                <a href="#video-feature" class="btn-primary">Watch Now</a>
             </div>
         </div>
     </nav>
 
-    <!-- MAIN HOMEPAGE CONTENT -->
+    <!-- HOME PAGE -->
     <main id="home-page">
-        <!-- Hero Section -->
-        <section class="pt-48 pb-12 px-6">
+        <!-- Hero -->
+        <section class="pt-48 pb-20 px-6">
             <div class="max-w-[1200px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
                 <div>
-                    <span class="text-[11px] font-bold tracking-[0.4em] text-[#D4AF37] uppercase mb-4 block">Future of Production</span>
-                    <h1 class="text-6xl md:text-8xl font-bold leading-[0.9] mb-8">Forging the <br><span class="gothic-serif italic font-normal">Unthinkable</span></h1>
+                    <span class="text-[11px] font-bold tracking-[0.4em] text-[#D4AF37] uppercase mb-4 block">3D Printing</span>
+                    <h1 class="text-6xl md:text-8xl font-bold leading-[0.9] mb-8">Architects of <br><span class="gothic-serif italic font-normal">Layered Time</span></h1>
                     <p class="text-[#6B6B6B] text-lg mb-10 max-w-md leading-relaxed">
-                        Transitioning from mass production to mass customization. Harnessing 3D printing to solve the world's most complex material challenges.
+                        Redefining the physical world through precision additive manufacturing. Where geometry meets digital light.
                     </p>
-                    <button onclick="document.getElementById('video-feature').scrollIntoView({behavior: 'smooth'})" class="btn-primary">Watch the Future</button>
+                    <button onclick="document.getElementById('video-feature').scrollIntoView({behavior: 'smooth'})" class="btn-primary">Begin Exploration</button>
                 </div>
-                <div class="relative group">
-                    <div class="rounded-2xl overflow-hidden border border-white shadow-2xl">
-                        <img src="https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&q=80&w=1200" alt="3D Printing Detail" class="img-noir w-full h-[500px] object-cover">
+                <div class="relative">
+                    <img src="https://images.unsplash.com/photo-1573108595997-158a187f4aa4?auto=format&fit=crop&q=80&w=1200" class="img-noir rounded-2xl shadow-2xl border border-white h-[500px] object-cover w-full">
+                </div>
+            </div>
+        </section>
+
+        <!-- Live Impact Dashboard -->
+        <section class="py-12 px-6 bg-[#1A1A1A] text-white">
+            <div class="max-w-[1200px] mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="p-8 border-l border-[#2F2F2F]">
+                    <span class="text-[10px] text-[#D4AF37] uppercase font-bold tracking-widest block mb-2">Live Material Saved (kg)</span>
+                    <h4 id="counter-plastic" class="text-4xl font-bold font-heading">12,402.000</h4>
+                </div>
+                <div class="p-8 border-l border-[#2F2F2F]">
+                    <span class="text-[10px] text-[#D4AF37] uppercase font-bold tracking-widest block mb-2">CO2 Offset (Tons)</span>
+                    <h4 id="counter-co2" class="text-4xl font-bold font-heading">482.12</h4>
+                </div>
+                <div class="p-8 border-l border-[#2F2F2F]">
+                    <span class="text-[10px] text-[#D4AF37] uppercase font-bold tracking-widest block mb-2">Custom Implants Printed</span>
+                    <h4 id="counter-medical" class="text-4xl font-bold font-heading">8,912</h4>
+                </div>
+            </div>
+        </section>
+
+        <!-- Homepage Video Feature -->
+        <section id="video-feature" class="py-32 px-6 bg-white">
+            <div class="max-w-[1000px] mx-auto text-center">
+                <h2 class="text-4xl font-bold mb-12">The Primer: What is 3D Printing?</h2>
+                <div class="video-wrapper shadow-2xl">
+                    <iframe src="https://www.youtube.com/embed/a42znmU6BLE" allowfullscreen></iframe>
+                </div>
+            </div>
+        </section>
+
+        <!-- Topics Summary -->
+        <section id="topics-anchor" class="py-32 px-6">
+            <div class="max-w-[1200px] mx-auto">
+                <h2 class="text-4xl font-bold mb-16 uppercase tracking-tighter">Core Innovation Pillars</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Topic 1 Card -->
+                    <div class="card-noir group cursor-pointer" onclick="showTopic('topic1')">
+                        <img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&q=80&w=600" class="w-full h-48 object-cover img-noir">
+                        <div class="p-10">
+                            <h3 class="text-xl font-bold mb-4 uppercase">Circular Economy</h3>
+                            <p class="text-sm text-[#6B6B6B] mb-8">Zero-waste localized production loops powered by recycled polymers.</p>
+                            <i data-lucide="arrow-right" class="text-[#D4AF37] transition group-hover:translate-x-2"></i>
+                        </div>
+                    </div>
+                    <!-- Topic 2 Card -->
+                    <div class="card-noir group cursor-pointer" onclick="showTopic('topic2')">
+                        <img src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&q=80&w=600" class="w-full h-48 object-cover img-noir">
+                        <div class="p-10">
+                            <h3 class="text-xl font-bold mb-4 uppercase">Precision Medical</h3>
+                            <p class="text-sm text-[#6B6B6B] mb-8">Patient-specific biocompatible solutions for complex reconstructive surgery.</p>
+                            <i data-lucide="arrow-right" class="text-[#D4AF37] transition group-hover:translate-x-2"></i>
+                        </div>
+                    </div>
+                    <!-- Topic 3 Card -->
+                    <div class="card-noir group cursor-pointer" onclick="showTopic('topic3')">
+                        <img src="https://images.unsplash.com/photo-1517976487492-5750f3195933?auto=format&fit=crop&q=80&w=600" class="w-full h-48 object-cover img-noir">
+                        <div class="p-10">
+                            <h3 class="text-xl font-bold mb-4 uppercase">Rapid Aerospace</h3>
+                            <p class="text-sm text-[#6B6B6B] mb-8">Next-gen flight hardware prototyping reducing weight by up to 60%.</p>
+                            <i data-lucide="arrow-right" class="text-[#D4AF37] transition group-hover:translate-x-2"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Topic Expansion Area -->
+                <div id="topic-display" class="mt-16 hidden">
+                    <!-- Content injected via JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Material Laboratory -->
+        <section id="materials-lab" class="py-32 px-6 bg-white/50">
+            <div class="max-w-[1200px] mx-auto">
+                <div class="flex justify-between items-end mb-16">
+                    <div>
+                        <h2 class="text-4xl font-bold uppercase tracking-tighter">The Materials Lab</h2>
+                        <p class="text-[#6B6B6B] mt-2">Exploring the chemistry behind the layers.</p>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                    <div class="card-noir p-6 bg-white flex flex-col justify-between min-h-[300px]">
+                        <div>
+                            <i data-lucide="microscope" class="w-8 h-8 text-[#D4AF37] mb-6"></i>
+                            <h4 class="font-bold text-lg mb-2">Cobalt Chrome</h4>
+                            <p class="text-xs text-[#6B6B6B]">Used in aerospace for high-temperature turbine blades.</p>
+                        </div>
+                        <div class="pt-6 border-t border-[#EDEAE6]">
+                            <span class="text-[10px] font-bold uppercase">Melting: 1400°C</span>
+                        </div>
+                    </div>
+                    <div class="card-noir p-6 bg-white flex flex-col justify-between min-h-[300px]">
+                        <div>
+                            <i data-lucide="leaf" class="w-8 h-8 text-[#D4AF37] mb-6"></i>
+                            <h4 class="font-bold text-lg mb-2">Mycelium Bio</h4>
+                            <p class="text-xs text-[#6B6B6B]">Compostable packaging grown from mushroom spores.</p>
+                        </div>
+                        <div class="pt-6 border-t border-[#EDEAE6]">
+                            <span class="text-[10px] font-bold uppercase">100% Biodegradable</span>
+                        </div>
+                    </div>
+                    <div class="card-noir p-6 bg-white flex flex-col justify-between min-h-[300px]">
+                        <div>
+                            <i data-lucide="shield" class="w-8 h-8 text-[#D4AF37] mb-6"></i>
+                            <h4 class="font-bold text-lg mb-2">Carbon Fiber Onyx</h4>
+                            <p class="text-xs text-[#6B6B6B]">Micro-carbon reinforced nylon for industrial tooling.</p>
+                        </div>
+                        <div class="pt-6 border-t border-[#EDEAE6]">
+                            <span class="text-[10px] font-bold uppercase">Strength: 120MPa</span>
+                        </div>
+                    </div>
+                    <div class="card-noir p-6 bg-white flex flex-col justify-between min-h-[300px]">
+                        <div>
+                            <i data-lucide="droplet" class="w-8 h-8 text-[#D4AF37] mb-6"></i>
+                            <h4 class="font-bold text-lg mb-2">Hydrogel Bio-ink</h4>
+                            <p class="text-xs text-[#6B6B6B]">Printing cellular scaffolds for organ regeneration.</p>
+                        </div>
+                        <div class="pt-6 border-t border-[#EDEAE6]">
+                            <span class="text-[10px] font-bold uppercase">Viability: 98%</span>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Feature Video Section (New) -->
-        <section id="video-feature" class="py-24 px-6 bg-[#2F2F2F]">
+        <!-- S-Tier Comparison Matrix -->
+        <section class="py-32 px-6 bg-[#2F2F2F] text-white">
             <div class="max-w-[1000px] mx-auto">
-                <div class="text-center mb-12">
-                    <h2 class="text-3xl font-bold text-white mb-4">What is 3D Printing?</h2>
-                    <p class="text-[#B8AFA6] uppercase tracking-widest text-[10px] font-bold">The Core mechanics of Additive Fabrication</p>
-                </div>
-                <div class="video-wrapper shadow-[0_0_50px_rgba(0,0,0,0.5)] border-none">
-                    <iframe src="https://www.youtube.com/embed/a42znmU6BLE" title="What is 3D Printing?" allowfullscreen></iframe>
-                </div>
-                <div class="mt-12 text-center">
-                    <p class="text-[#B8AFA6] max-w-2xl mx-auto text-sm leading-relaxed italic">
-                        "At its simplest, 3D printing is a process that builds layers to create a three-dimensional object from a digital file. This 'additive' approach is what differentiates it from traditional 'subtractive' manufacturing."
-                    </p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Topics Section -->
-        <section id="topics-anchor" class="py-32 px-6 bg-white">
-            <div class="max-w-[1200px] mx-auto">
-                <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
-                    <h2 class="text-4xl font-bold max-w-sm uppercase tracking-tighter">Strategic Innovation</h2>
-                    <p class="text-[#6B6B6B] max-w-sm text-sm">Focused impact on the three pillars of modern additive manufacturing.</p>
-                </div>
-                
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <div class="card-noir cursor-pointer" onclick="showPage('topic1')">
-                        <div class="h-64 overflow-hidden">
-                            <img src="https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?auto=format&fit=crop&q=80&w=800" class="img-noir w-full h-full object-cover">
-                        </div>
-                        <div class="p-8">
-                            <h3 class="font-bold text-xl mb-4">Circular Economy</h3>
-                            <p class="text-sm text-[#6B6B6B] mb-6">Optimizing resource loops to turn waste into high-value components.</p>
-                            <span class="text-[10px] font-bold uppercase tracking-widest text-[#D4AF37]">Explore Case Study</span>
-                        </div>
+                <h2 class="text-3xl font-bold mb-16 text-center">The Additive Advantage</h2>
+                <div class="space-y-0">
+                    <div class="comp-row flex justify-between font-bold text-[10px] uppercase tracking-widest text-[#B8AFA6]">
+                        <span class="w-1/3">Feature</span>
+                        <span class="w-1/3 text-center">Traditional</span>
+                        <span class="w-1/3 text-right text-[#D4AF37]">Additive (3D)</span>
                     </div>
-                    <div class="card-noir cursor-pointer" onclick="showPage('topic2')">
-                        <div class="h-64 overflow-hidden">
-                            <img src="https://images.unsplash.com/photo-1576086213369-97a306d36557?auto=format&fit=crop&q=80&w=800" class="img-noir w-full h-full object-cover">
-                        </div>
-                        <div class="p-8">
-                            <h3 class="font-bold text-xl mb-4">Precision Healthcare</h3>
-                            <p class="text-sm text-[#6B6B6B] mb-6">Patient-specific biocompatible implants and surgical tools.</p>
-                            <span class="text-[10px] font-bold uppercase tracking-widest text-[#D4AF37]">Explore Case Study</span>
-                        </div>
+                    <div class="comp-row flex justify-between items-center">
+                        <span class="w-1/3 text-sm">Material Waste</span>
+                        <span class="w-1/3 text-center text-xs opacity-50">Up to 80%</span>
+                        <span class="w-1/3 text-right text-xs text-[#D4AF37]">Less than 5%</span>
                     </div>
-                    <div class="card-noir cursor-pointer" onclick="showPage('topic3')">
-                        <div class="h-64 overflow-hidden">
-                            <img src="https://images.unsplash.com/photo-1531297484001-80022131f5a1?auto=format&fit=crop&q=80&w=800" class="img-noir w-full h-full object-cover">
-                        </div>
-                        <div class="p-8">
-                            <h3 class="font-bold text-xl mb-4">Rapid Prototyping</h3>
-                            <p class="text-sm text-[#6B6B6B] mb-6">Reducing R&D cycles from months to days for aerospace.</p>
-                            <span class="text-[10px] font-bold uppercase tracking-widest text-[#D4AF37]">Explore Case Study</span>
-                        </div>
+                    <div class="comp-row flex justify-between items-center">
+                        <span class="w-1/3 text-sm">Supply Chain</span>
+                        <span class="w-1/3 text-center text-xs opacity-50">Global / Complex</span>
+                        <span class="w-1/3 text-right text-xs text-[#D4AF37]">Localized / Direct</span>
+                    </div>
+                    <div class="comp-row flex justify-between items-center border-none">
+                        <span class="w-1/3 text-sm">Complexity Cost</span>
+                        <span class="w-1/3 text-center text-xs opacity-50">Increases per Detail</span>
+                        <span class="w-1/3 text-right text-xs text-[#D4AF37]">Complexity is Free</span>
                     </div>
                 </div>
             </div>
         </section>
     </main>
 
-    <!-- TOPIC PAGE: CIRCULAR ECONOMY (Example) -->
-    <main id="topic1-page" class="hidden-section">
-        <section class="pt-40 pb-20 px-6 bg-[#1A1A1A] text-white">
-            <div class="max-w-[1200px] mx-auto">
-                <h1 class="text-5xl font-bold mb-4 uppercase tracking-tighter">Circular Economy</h1>
-                <p class="text-[#D4AF37] uppercase tracking-widest text-sm">Eliminating Waste through Additive loops</p>
-            </div>
-        </section>
-        <section class="py-24 px-6">
-            <div class="max-w-[1200px] mx-auto grid grid-cols-1 md:grid-cols-2 gap-20">
-                <div>
-                    <h2 class="text-3xl font-bold mb-6">Resource Optimization</h2>
-                    <p class="text-[#6B6B6B] mb-6">Additive manufacturing enables a paradigm shift from 'Take-Make-Waste' to a circular loop. Industrial-scale 3D printing could reduce raw material requirements by 90% by localized, on-demand fabrication.</p>
-                    <button onclick="showPage('home')" class="btn-primary">Return to Overview</button>
-                </div>
-                <div class="bg-white p-12 border border-[#B8AFA6] rounded-xl flex items-center justify-center">
-                    <i data-lucide="refresh-cw" class="w-24 h-24 text-[#D4AF37] opacity-20"></i>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <!-- MEDIA & NEWS PAGE -->
+    <!-- MEDIA CENTER -->
     <main id="media-page" class="hidden-section">
-        <section class="pt-40 pb-24 px-6">
-            <div class="max-w-[1200px] mx-auto">
-                <h1 class="text-4xl font-bold mb-16 uppercase tracking-tighter">Industrial Media Center</h1>
-                
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-24">
-                    <div>
-                        <div class="video-wrapper mb-4">
-                            <iframe src="https://www.youtube.com/embed/a42znmU6BLE" allowfullscreen></iframe>
-                        </div>
-                        <h3 class="font-bold text-sm uppercase tracking-wide">Additive Mechanics</h3>
+        <section class="pt-40 pb-24 px-6 max-w-[1200px] mx-auto">
+            <h1 class="text-5xl font-bold mb-16 uppercase">Media Archives</h1>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 mb-24">
+                <div>
+                    <div class="video-wrapper mb-6 shadow-xl">
+                        <iframe src="https://www.youtube.com/embed/q0picmNrFoU" allowfullscreen></iframe>
                     </div>
-                    <div>
-                        <div class="video-wrapper mb-4">
-                            <iframe src="https://www.youtube.com/embed/q0picmNrFoU" allowfullscreen></iframe>
-                        </div>
-                        <h3 class="font-bold text-sm uppercase tracking-wide">Aerospace Evolution</h3>
-                    </div>
-                    <div>
-                        <div class="video-wrapper mb-4">
-                            <iframe src="https://www.youtube.com/embed/2XlHMR01NYA" allowfullscreen></iframe>
-                        </div>
-                        <h3 class="font-bold text-sm uppercase tracking-wide">Surgical Precision</h3>
-                    </div>
+                    <h3 class="text-xl font-bold">Aerospace: A Decade of Change</h3>
                 </div>
-
-                <h2 class="text-2xl font-bold mb-10 uppercase tracking-tight">Global News Feed</h2>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <div class="card-noir p-8">
-                        <span class="text-[10px] font-bold text-[#D4AF37] mb-4 block">Medical Update</span>
-                        <h4 class="font-bold mb-4">FDA Clears New Bio-Implants</h4>
-                        <p class="text-xs text-[#6B6B6B] mb-6">Patient-specific spinal cages produced within hospital networks set new regulatory standards.</p>
-                        <a href="https://www.bbc.com/news/topics/c008ql15d1gt" target="_blank" class="text-[10px] font-bold uppercase underline">Source: BBC News</a>
+                <div>
+                    <div class="video-wrapper mb-6 shadow-xl">
+                        <iframe src="https://www.youtube.com/embed/2XlHMR01NYA" allowfullscreen></iframe>
                     </div>
-                    <div class="card-noir p-8">
-                        <span class="text-[10px] font-bold text-[#D4AF37] mb-4 block">Sustainability</span>
-                        <h4 class="font-bold mb-4">Rise of Bio-Based Filaments</h4>
-                        <p class="text-xs text-[#6B6B6B] mb-6">Mushroom and seaweed-derived polymers are replacing petroleum plastics in prototyping.</p>
-                        <a href="https://www.bbc.com/news/topics/c008ql15d1gt" target="_blank" class="text-[10px] font-bold uppercase underline">Source: BBC News</a>
-                    </div>
-                    <div class="card-noir p-8">
-                        <span class="text-[10px] font-bold text-[#D4AF37] mb-4 block">Aerospace</span>
-                        <h4 class="font-bold mb-4">Airbus Metal AM Expansion</h4>
-                        <p class="text-xs text-[#6B6B6B] mb-6">3D printed brackets for the A350 fleet reduce weight by 45%, leading to major fuel savings.</p>
-                        <a href="https://www.bbc.com/news/topics/c008ql15d1gt" target="_blank" class="text-[10px] font-bold uppercase underline">Source: BBC News</a>
-                    </div>
+                    <h3 class="text-xl font-bold">The Next Surgical Frontier</h3>
                 </div>
+            </div>
+            <h2 class="text-2xl font-bold mb-10 border-b border-[#B8AFA6] pb-4">BBC Global Feed</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <a href="https://www.bbc.com/news/topics/c008ql15d1gt" target="_blank" class="card-noir p-8 block">
+                    <span class="text-[10px] text-[#D4AF37] font-bold uppercase mb-4 block">Regulatory</span>
+                    <h4 class="font-bold mb-4">FDA Clears AI-Guided Printing</h4>
+                    <p class="text-xs text-[#6B6B6B]">New pathways for intra-operative implant production.</p>
+                </a>
+                <a href="https://www.bbc.com/news/topics/c008ql15d1gt" target="_blank" class="card-noir p-8 block">
+                    <span class="text-[10px] text-[#D4AF37] font-bold uppercase mb-4 block">Industry</span>
+                    <h4 class="font-bold mb-4">The Gigafactory of Additive</h4>
+                    <p class="text-xs text-[#6B6B6B]">Scalable robotic cells are now printing entire car chassis.</p>
+                </a>
+                <a href="https://www.bbc.com/news/topics/c008ql15d1gt" target="_blank" class="card-noir p-8 block">
+                    <span class="text-[10px] text-[#D4AF37] font-bold uppercase mb-4 block">Green Tech</span>
+                    <h4 class="font-bold mb-4">Seaweed-based Biopolymers</h4>
+                    <p class="text-xs text-[#6B6B6B]">How the ocean is fueling the next generation of plastic-free prints.</p>
+                </a>
             </div>
         </section>
     </main>
 
-    <!-- Footer -->
-    <footer class="bg-[#1A1A1A] text-white py-24 px-6">
-        <div class="max-w-[1200px] mx-auto flex flex-col md:flex-row justify-between items-center gap-10 border-t border-[#2F2F2F] pt-20">
+    <footer class="bg-[#1A1A1A] text-white py-24 px-6 border-t border-[#D4AF37]">
+        <div class="max-w-[1200px] mx-auto grid grid-cols-1 md:grid-cols-2 items-center gap-10">
             <div>
-                <p class="text-[10px] uppercase tracking-[0.3em] text-[#6B6B6B] mb-4">Designed & Developed by</p>
-                <p class="text-2xl gothic-serif italic">Himash Fernando</p>
+                <p class="text-[10px] uppercase tracking-[0.4em] text-[#B8AFA6] mb-4">Designed By</p>
+                <p class="text-3xl gothic-serif italic">Himash Fernando</p>
             </div>
-            <div class="text-center md:text-right">
-                <p class="text-[#6B6B6B] text-xs mb-4">&copy; 2024 Forge Innovation Labs. All rights reserved.</p>
-                <div class="flex gap-6 justify-center md:justify-end text-[10px] uppercase font-bold tracking-widest text-[#D4AF37]">
-                    <a href="https://www.bbc.com/news/topics/c008ql15d1gt">BBC News</a>
-                    <a href="#">Privacy</a>
-                    <a href="#">Terms</a>
+            <div class="md:text-right">
+                <p class="text-[#6B6B6B] text-xs">&copy; 2026 Forge Innovation. Data-driven and Noir-designed.</p>
+                <div class="flex gap-6 justify-center md:justify-end mt-4 text-[10px] font-bold uppercase tracking-widest text-[#D4AF37]">
+                    <a href="javascript:void(0)" onclick="showPage('home')">Home</a>
+                    <a href="javascript:void(0)" onclick="showPage('media')">Archives</a>
                 </div>
             </div>
         </div>
@@ -307,6 +396,30 @@
     <script>
         lucide.createIcons();
 
+        // Scroll Progress
+        window.onscroll = function() {
+            let winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            let height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            let scrolled = (winScroll / height) * 100;
+            document.getElementById("scroll-progress").style.width = scrolled + "%";
+        };
+
+        // Live Counters
+        let plastic = 12402.000;
+        let co2 = 482.12;
+        let medical = 8912;
+
+        setInterval(() => {
+            plastic += Math.random() * 0.05;
+            co2 += Math.random() * 0.001;
+            if(Math.random() > 0.95) medical++;
+            
+            document.getElementById('counter-plastic').innerText = plastic.toFixed(3);
+            document.getElementById('counter-co2').innerText = co2.toFixed(2);
+            document.getElementById('counter-medical').innerText = medical.toLocaleString();
+        }, 2000);
+
+        // Routing
         function showPage(pageId) {
             document.querySelectorAll('main').forEach(p => p.classList.add('hidden-section'));
             const target = document.getElementById(pageId + '-page') || document.getElementById('home-page');
@@ -314,17 +427,80 @@
             window.scrollTo(0, 0);
         }
 
-        // Audio Logic
+        // Topic Expansion Logic
+        const topicData = {
+            topic1: {
+                title: "The Circular Loop",
+                subtitle: "Redefining Resource Management",
+                content: "The circular economy in 3D printing transitions manufacturing from a 'take-make-waste' model to a regenerative loop. By utilizing shredded ocean plastics and industrial waste as raw filament, we reduce the carbon footprint of logistics by 90%. Localized 'micro-factories' print only what is needed, when it is needed.",
+                vision: "Every community becomes its own supplier, harvesting its waste to build its future.",
+                impact: "Reduction of 4.5 million tons of plastic waste annually through recycled polymer injection."
+            },
+            topic2: {
+                title: "Precision Bio-Fabrication",
+                subtitle: "The Future of Patient Care",
+                content: "Medical 3D printing is moving beyond basic prosthetics. We are now fabricating patient-specific titanium cranial implants and bio-printed scaffolds that encourage bone regrowth. By using CT scan data, surgeons can rehearse operations on 1:1 anatomical models, reducing operating room time by an average of 25%.",
+                vision: "Healthcare that fits the individual, literally.",
+                impact: "Zero-rejection rates for custom-contoured maxillofacial implants."
+            },
+            topic3: {
+                title: "Structural Optimization",
+                subtitle: "Aerospace & Generative Design",
+                content: "In aerospace, weight is everything. Through generative design and 3D metal printing, we create 'lattice' structures that are impossible to machine. These parts provide the same structural integrity as solid blocks but at a fraction of the weight, leading to massive fuel savings and increased payload capacity.",
+                vision: "Engineering inspired by the organic efficiency of bone and tree structures.",
+                impact: "60% weight reduction in engine bracketry for next-gen commercial aircraft."
+            }
+        };
+
+        function showTopic(id) {
+            const data = topicData[id];
+            const display = document.getElementById('topic-display');
+            display.classList.remove('hidden');
+            display.innerHTML = `
+                <div class="topic-content-animate bg-white border border-[#B8AFA6] p-12 rounded-2xl">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                        <div>
+                            <span class="text-[10px] font-bold text-[#D4AF37] uppercase tracking-widest">${data.subtitle}</span>
+                            <h2 class="text-4xl font-bold mt-2 mb-6 uppercase">${data.title}</h2>
+                            <p class="text-[#6B6B6B] leading-relaxed mb-8">${data.content}</p>
+                            <div class="bg-[#EDEAE6] p-6 rounded-lg">
+                                <h5 class="font-bold text-xs uppercase mb-2">Primary Impact</h5>
+                                <p class="text-sm italic">"${data.impact}"</p>
+                            </div>
+                        </div>
+                        <div class="flex flex-col justify-center">
+                            <div class="border-l-4 border-[#1A1A1A] pl-8">
+                                <h4 class="text-xl font-bold mb-4 gothic-serif italic underline decoration-[#D4AF37]">The Strategic Vision</h4>
+                                <p class="text-lg leading-relaxed text-[#2F2F2F]">${data.vision}</p>
+                            </div>
+                            <button onclick="document.getElementById('topic-display').classList.add('hidden')" class="mt-12 text-[10px] font-bold uppercase tracking-widest hover:text-[#D4AF37] flex items-center gap-2">
+                                <i data-lucide="x" class="w-3 h-3"></i> Close Intelligence Panel
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            lucide.createIcons();
+            window.scrollTo({
+                top: display.offsetTop - 100,
+                behavior: 'smooth'
+            });
+        }
+
+        // Audio Visualizer Logic
         const audio = document.getElementById('bg-audio');
+        const audioBtn = document.getElementById('audio-btn');
         const audioIcon = document.getElementById('audio-icon');
         let isPlaying = false;
 
         function toggleAudio() {
             if (isPlaying) {
                 audio.pause();
+                audioBtn.classList.remove('playing');
                 audioIcon.setAttribute('data-lucide', 'volume-x');
             } else {
                 audio.play();
+                audioBtn.classList.add('playing');
                 audioIcon.setAttribute('data-lucide', 'volume-2');
             }
             isPlaying = !isPlaying;
