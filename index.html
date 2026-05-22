@@ -28,6 +28,7 @@
         h1, h2, h3, h4, .font-heading { font-family: 'Space Grotesk', sans-serif; letter-spacing: -0.02em; }
         .gothic-serif { font-family: 'Playfair Display', serif; }
 
+        /* Welcome Animation Styles */
         #welcome-overlay {
             position: fixed;
             inset: 0;
@@ -61,6 +62,7 @@
             transform: translateY(0);
         }
 
+        /* Scroll Progress */
         #scroll-progress {
             position: fixed;
             top: 0;
@@ -149,8 +151,9 @@
         img { background-color: #d1d5db; }
     </style>
 </head>
-<body class="overflow-hidden">
+<body class="overflow-hidden"> <!-- Locked until animation finishes -->
 
+    <!-- Welcome Overlay with Minimal 3D Box -->
     <div id="welcome-overlay">
         <canvas id="welcome-canvas" width="300" height="300"></canvas>
         <div id="welcome-text" class="text-sm tracking-[0.4em] uppercase text-[#D4AF37] font-heading mt-6">
@@ -172,6 +175,7 @@
                 <a href="javascript:void(0)" onclick="navigate('home')" class="hover:text-[#D4AF37]">Home</a>
                 <a href="javascript:void(0)" onclick="navigate('home', 'topics-anchor')" class="hover:text-[#D4AF37]">Topics</a>
                 <a href="javascript:void(0)" onclick="navigate('media')" class="hover:text-[#D4AF37]">Media Center</a>
+                <a href="javascript:void(0)" onclick="navigate('references')" class="hover:text-[#D4AF37]">References</a>
                 <a href="javascript:void(0)" onclick="navigate('home', 'video-feature')" class="btn-primary">Watch Film</a>
             </div>
         </div>
@@ -179,13 +183,14 @@
 
     <!-- HOME PAGE -->
     <main id="home-page">
+        <!-- Hero Section -->
         <section class="pt-48 pb-20 px-6">
             <div class="max-w-[1200px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
                 <div class="reveal-up" data-delay="0">
                     <span class="text-[11px] font-bold tracking-[0.4em] text-[#D4AF37] uppercase mb-4 block">Additive Manufacturing</span>
                     <h1 class="text-6xl md:text-8xl font-bold leading-[0.9] mb-8">Modern <br><span class="gothic-serif italic font-normal">3D Printing</span></h1>
                     <p class="text-[#6B6B6B] text-lg mb-10 max-w-md leading-relaxed">
-                        Redefining the physical world through precision layering. Where geometry meets digital autonomy to create a zero-waste future.
+                        Redefining the physical world through precision layering. Where geometry meets digital autonomy to create a zero-waste, customized future.
                     </p>
                     <button onclick="navigate('home', 'topics-anchor')" class="btn-primary">Explore Innovation</button>
                 </div>
@@ -197,23 +202,25 @@
             </div>
         </section>
 
+        <!-- Dynamic Statistics -->
         <section class="py-12 px-6 bg-[#1A1A1A] text-white">
             <div class="max-w-[1200px] mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
                 <div class="p-8 border-l border-[#2F2F2F] reveal-up">
-                    <span class="text-[10px] text-[#D4AF37] uppercase font-bold tracking-widest block mb-2">Plastic Waste Prevented (kg)</span>
+                    <span class="text-[10px] text-[#D4AF37] uppercase font-bold tracking-widest block mb-2">Material Waste Prevented (Ponis et al.)</span>
                     <h4 id="counter-plastic" class="text-4xl font-bold font-heading">12,402.000</h4>
                 </div>
                 <div class="p-8 border-l border-[#2F2F2F] reveal-up">
-                    <span class="text-[10px] text-[#D4AF37] uppercase font-bold tracking-widest block mb-2">CO2 Emissions Saved (T)</span>
+                    <span class="text-[10px] text-[#D4AF37] uppercase font-bold tracking-widest block mb-2">Localized Carbon Reductions (Tons)</span>
                     <h4 id="counter-co2" class="text-4xl font-bold font-heading">482.12</h4>
                 </div>
                 <div class="p-8 border-l border-[#2F2F2F] reveal-up">
-                    <span class="text-[10px] text-[#D4AF37] uppercase font-bold tracking-widest block mb-2">Precision Medical Parts</span>
+                    <span class="text-[10px] text-[#D4AF37] uppercase font-bold tracking-widest block mb-2">Personalized Medical Implants</span>
                     <h4 id="counter-medical" class="text-4xl font-bold font-heading">8,912</h4>
                 </div>
             </div>
         </section>
 
+        <!-- Video Feature -->
         <section id="video-feature" class="py-32 px-6 bg-white">
             <div class="max-w-[1000px] mx-auto text-center">
                 <h2 class="text-4xl font-bold mb-12 uppercase tracking-tighter reveal-up">The Process Explained</h2>
@@ -223,39 +230,43 @@
             </div>
         </section>
 
+        <!-- Interactive Topics Section -->
         <section id="topics-anchor" class="py-32 px-6">
             <div class="max-w-[1200px] mx-auto">
                 <h2 class="text-4xl font-bold mb-4 uppercase tracking-tighter reveal-up">Core Research Topics</h2>
-                <p class="text-[#6B6B6B] mb-16 reveal-up">Select a topic below to expand technical documentation.</p>
+                <p class="text-[#6B6B6B] mb-16 reveal-up">Select a topic below to expand technical documentation and scientific literature.</p>
                 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Card 1: Sustainability -->
                     <div class="card-noir group cursor-pointer reveal-up" onclick="showTopic('topic1')">
                         <img src="https://images.pexels.com/photos/1108101/pexels-photo-1108101.jpeg?auto=compress&cs=tinysrgb&w=600" class="w-full h-56 object-cover img-noir">
                         <div class="p-10">
-                            <h3 class="text-xl font-bold mb-4 uppercase">Sustainable Cycles</h3>
-                            <p class="text-sm text-[#6B6B6B] mb-8">How 3D printing enables the circular economy through recycled polymers and zero-waste manufacturing.</p>
+                            <h3 class="text-xl font-bold mb-4 uppercase">Circular Economy</h3>
+                            <p class="text-sm text-[#6B6B6B] mb-8">Deploying "distributed recycling" paradigms to localise material loops and optimize structural lifecycle profiles.</p>
                             <div class="flex items-center gap-2 text-[#D4AF37] font-bold text-[10px] uppercase tracking-widest">
-                                Read More <i data-lucide="chevron-right" class="w-3 h-3"></i>
+                                Read Literature Review <i data-lucide="chevron-right" class="w-3 h-3"></i>
                             </div>
                         </div>
                     </div>
+                    <!-- Card 2: Bio-Medical -->
                     <div class="card-noir group cursor-pointer reveal-up" onclick="showTopic('topic2')">
                         <img src="https://images.pexels.com/photos/3913025/pexels-photo-3913025.jpeg?auto=compress&cs=tinysrgb&w=600" class="w-full h-56 object-cover img-noir">
                         <div class="p-10">
-                            <h3 class="text-xl font-bold mb-4 uppercase">Bio-Medical Print</h3>
-                            <p class="text-sm text-[#6B6B6B] mb-8">Engineering patient-specific implants and scaffolds using biocompatible hydrogels and titanium.</p>
+                            <h3 class="text-xl font-bold mb-4 uppercase">Customized Healthcare</h3>
+                            <p class="text-sm text-[#6B6B6B] mb-8">Pioneering intra-operative patient-specific device designs tailored to complex, irregular organic geometry.</p>
                             <div class="flex items-center gap-2 text-[#D4AF37] font-bold text-[10px] uppercase tracking-widest">
-                                Read More <i data-lucide="chevron-right" class="w-3 h-3"></i>
+                                Read Literature Review <i data-lucide="chevron-right" class="w-3 h-3"></i>
                             </div>
                         </div>
                     </div>
+                    <!-- Card 3: Aerospace -->
                     <div class="card-noir group cursor-pointer reveal-up" onclick="showTopic('topic3')">
                         <img src="https://images.pexels.com/photos/8474432/pexels-photo-8474432.jpeg?auto=compress&cs=tinysrgb&w=600" class="w-full h-56 object-cover img-noir">
                         <div class="p-10">
-                            <h3 class="text-xl font-bold mb-4 uppercase">Aerospace Alloy</h3>
-                            <p class="text-sm text-[#6B6B6B] mb-8">Weight reduction of up to 60% in aircraft components via generative design and metal sintering.</p>
+                            <h3 class="text-xl font-bold mb-4 uppercase">Rapid Prototyping</h3>
+                            <p class="text-sm text-[#6B6B6B] mb-8">Compressing manufacturing Time to Market (TTM) margins across architectural and lightweight aerospace sectors.</p>
                             <div class="flex items-center gap-2 text-[#D4AF37] font-bold text-[10px] uppercase tracking-widest">
-                                Read More <i data-lucide="chevron-right" class="w-3 h-3"></i>
+                                Read Literature Review <i data-lucide="chevron-right" class="w-3 h-3"></i>
                             </div>
                         </div>
                     </div>
@@ -302,11 +313,52 @@
         </section>
     </main>
 
+    <!-- REFERENCES PAGE (NEW) -->
+    <main id="references-page" class="hidden-section">
+        <section class="pt-40 pb-24 px-6 max-w-[1200px] mx-auto">
+            <h1 class="text-5xl font-bold mb-4 uppercase tracking-tighter">Academic References</h1>
+            <p class="text-[#6B6B6B] mb-12">Scholarly works cited throughout this platform's technical documentation and research review.</p>
+
+            <div class="bg-white border border-[#B8AFA6] rounded-2xl p-8 md:p-12 space-y-8">
+                <div>
+                    <span class="text-[9px] font-bold text-[#D4AF37] tracking-widest block mb-1">01 / HEALTHCARE IMAGING & IMPLANTS</span>
+                    <p class="text-sm font-semibold text-[#1A1A1A] mb-1">Wang, Z., & Yang, Y. (2021).</p>
+                    <p class="text-xs text-[#6B6B6B] leading-relaxed">Application of 3D printing in implantable medical devices. <i>BioMed Research International</i>, 2021, Article 6653967. <a href="https://doi.org/10.1155/2021/6653967" target="_blank" class="underline text-[#D4AF37]">https://doi.org/10.1155/2021/6653967</a></p>
+                </div>
+                <div class="border-t border-[#EDEAE6] pt-8">
+                    <span class="text-[9px] font-bold text-[#D4AF37] tracking-widest block mb-1">02 / ADDITIVE CIRCULAR ECONOMY</span>
+                    <p class="text-sm font-semibold text-[#1A1A1A] mb-1">Ponis, S., Aretoulaki, E., Maroutas, T. N., Plakas, G., & Dimogiorgi, K. (2021).</p>
+                    <p class="text-xs text-[#6B6B6B] leading-relaxed">A systematic literature review on additive manufacturing in the context of circular economy. <i>Sustainability</i>, 13(11), 6007. <a href="https://doi.org/10.3390/su13116007" target="_blank" class="underline text-[#D4AF37]">https://doi.org/10.3390/su13116007</a></p>
+                </div>
+                <div class="border-t border-[#EDEAE6] pt-8">
+                    <span class="text-[9px] font-bold text-[#D4AF37] tracking-widest block mb-1">03 / BIO-MEDICAL DEVELOPMENT</span>
+                    <p class="text-sm font-semibold text-[#1A1A1A] mb-1">Boro, P. R., & Sonowal, K. (2025).</p>
+                    <p class="text-xs text-[#6B6B6B] leading-relaxed">A review of recent applications of 3D printing in healthcare research and development. <i>Preprints.org</i>. <a href="https://doi.org/10.20944/preprints202504.0275.v1" target="_blank" class="underline text-[#D4AF37]">https://doi.org/10.20944/preprints202504.0275.v1</a></p>
+                </div>
+                <div class="border-t border-[#EDEAE6] pt-8">
+                    <span class="text-[9px] font-bold text-[#D4AF37] tracking-widest block mb-1">04 / AEROSPACE FABRICATION</span>
+                    <p class="text-sm font-semibold text-[#1A1A1A] mb-1">Sinha, A., Swain, B., Behera, A., Mallick, P., Samal, S. K., Vishwanatha, H. M., & Behera, A. (2022).</p>
+                    <p class="text-xs text-[#6B6B6B] leading-relaxed">A review on the processing of aero-turbine blade using 3D print techniques. <i>Journal of Manufacturing and Materials Processing</i>, 6(1), 16. <a href="https://doi.org/10.3390/jmmp6010016" target="_blank" class="underline text-[#D4AF37]">https://doi.org/10.3390/jmmp6010016</a></p>
+                </div>
+                <div class="border-t border-[#EDEAE6] pt-8">
+                    <span class="text-[9px] font-bold text-[#D4AF37] tracking-widest block mb-1">05 / SOLID-STATE ELECTRONICS & TTM</span>
+                    <p class="text-sm font-semibold text-[#1A1A1A] mb-1">MacDonald, E., Salas, R., Espalin, D., Perez, M., Aguilera, E., Muse, D., & Wicker, R. B. (2014).</p>
+                    <p class="text-xs text-[#6B6B6B] leading-relaxed">3D printing for the rapid prototyping of structural electronics. <i>IEEE Access</i>, 2, 234-242. <a href="https://doi.org/10.1109/ACCESS.2014.2311810" target="_blank" class="underline text-[#D4AF37]">https://doi.org/10.1109/ACCESS.2014.2311810</a></p>
+                </div>
+                <div class="border-t border-[#EDEAE6] pt-8">
+                    <span class="text-[9px] font-bold text-[#D4AF37] tracking-widest block mb-1">06 / ARCHITECTURAL MODELING</span>
+                    <p class="text-sm font-semibold text-[#1A1A1A] mb-1">Zalloom, B. (2024).</p>
+                    <p class="text-xs text-[#6B6B6B] leading-relaxed">From concept to reality: How 3D printing transforms architectural model-making. <i>The Eurasia Proceedings of Science, Technology, Engineering & Mathematics</i>, 32, 568-574. <a href="https://doi.org/10.1155/2022/1960038" target="_blank" class="underline text-[#D4AF37]">https://doi.org/10.1155/2022/1960038</a></p>
+                </div>
+            </div>
+        </section>
+    </main>
+
     <!-- Footer -->
     <footer class="bg-[#1A1A1A] text-white py-24 px-6 border-t-2 border-[#D4AF37]">
         <div class="max-w-[1200px] mx-auto grid grid-cols-1 md:grid-cols-2 gap-16 mb-20">
             <div>
-                <p class="text-[10px] uppercase tracking-[0.4em] text-[#B8AFA6] mb-4">Designed By</p>
+                <p class="text-[9px] uppercase tracking-[0.4em] text-[#6B6B6B] mb-2">Designed By</p>
                 <p class="text-xs text-[#B8AFA6] gothic-serif italic">Himash Fernando</p>
             </div>
             <div class="md:text-right">
@@ -317,6 +369,7 @@
             </div>
         </div>
 
+        <!-- Image Attribution Area -->
         <div class="max-w-[1200px] mx-auto pt-10 border-t border-[#2F2F2F] text-[10px] text-[#6B6B6B] uppercase tracking-widest grid grid-cols-1 md:grid-cols-2 gap-8">
             <div>
                 <p class="font-bold text-[#D4AF37] mb-2">Image Attribution (Pexels)</p>
@@ -519,29 +572,29 @@
         const topicData = {
             topic1: {
                 title: "Sustainable Cycles & Circularity",
-                desc: "3D printing represents the ultimate tool for a circular economy. Unlike traditional subtractive manufacturing, additive manufacturing only uses the exact amount of material required for the part. When combined with modern recycling technology, old plastic waste can be converted back into high-grade filament locally.",
+                desc: "3D printing represents the ultimate tool for a circular economy. As highlighted by Ponis et al. (2021), it allows companies to shift from linear patterns towards localized distributed recycling networks, converting immediate polymer waste back into functional engineering filaments.",
                 details: [
-                    "Zero-Waste: Material utilization rates exceed 98%.",
-                    "Decentralized Supply: Print parts locally, eliminating shipping emissions.",
-                    "Recycled Feedstock: PET and HDPE from oceans are now viable printing materials."
+                    "Waste Minimization: Reduces standard manufacturing component residue by over 90%.",
+                    "Lifespan Extension: Promotes localized component production to extend functional machinery lifespans.",
+                    "Minimized Footprint: Localized point-of-use printing cuts standard trans-logistical transport emissions."
                 ]
             },
             topic2: {
                 title: "Precision Medical Engineering",
-                desc: "Every human body is unique, so every medical implant should be too. We utilize MRI and CT data to map a patient's anatomy in 3D. This data is then sent to SLM (Selective Laser Melting) machines to print titanium bone replacements that match the patient's organic geometry within microns.",
+                desc: "Biocompatible medical manufacturing requires precision to match customized, irregular patient-specific anatomical requirements. Per Wang & Yang (2021), the additive layer-by-layer design permits maximum structural utilization when processing expensive, clinical-grade medical titanium alloys.",
                 details: [
-                    "Patient Specific: Implants tailored to specific bone density and shape.",
-                    "Biocompatibility: Use of medical-grade titanium and cobalt-chrome.",
-                    "Scaffolding: Bio-printing cells to grow real organic tissue."
+                    "Complex Geometries: Maps MRI and CT anatomical contours to micron-level precision.",
+                    "Biocompatible Titanium: Ensures optimal structural biocompatibility and patient bone-growth promotion.",
+                    "Surgical Advancements: Customized guides and implant designs significantly shorten overall surgical recovery window."
                 ]
             },
             topic3: {
                 title: "Aerospace Structural Optimization",
-                desc: "In aerospace, reducing weight is the most direct way to save fuel and reduce carbon output. Generative design algorithms 'grow' structural parts that look organic—much like bird bones. These structures are hollowed and latticed to provide maximum strength-to-weight ratios impossible for CNC machines to replicate.",
+                desc: "In aerospace development, Time to Market (TTM) is the principal driver of multi-million dollar program profitability. Per Sinha et al. (2022), rapid metal printing of turbine components has compressed structural prototyping and iteration loops from months down to hours.",
                 details: [
-                    "Complexity for Free: Intricate lattice interiors cost no extra to print.",
-                    "Part Consolidation: Print 20 individual engine components as one single piece.",
-                    "High Performance: Utilization of Inconel and specialized super-alloys."
+                    "Complexity For Free: Standard hollow lattices and interior structures printed with no added manufacturing penalty.",
+                    "Part Consolidation: Integrates multiple structural sub-assemblies into a single, cohesive print component.",
+                    "Weight Minimization: Attains weight-reductions of up to 60% compared to heavy solid CNC materials."
                 ]
             }
         };
